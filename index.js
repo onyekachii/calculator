@@ -122,7 +122,8 @@ Contents
                 displayMsg= undefined;
                 document.getElementById("code").innerHTML="";
                 document.getElementById("show").innerHTML= "";
-                
+                $("#plus, #minus, #multiply, #modulo, #equa").
+                css("background-color","darkorange");
             })
 
 //////////////////////////////
