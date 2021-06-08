@@ -1,82 +1,66 @@
 html{
-    box-sizing:border-box;
+    background-color: teal;
+    background-image: url(./circuit-board.svg);
 }
 body{
-    background-color: black !important;
+    background-color:seagreen!important;
+    background-image: url(./circuit-board.svg);
 }
-#code{
-    display: block;
-    font-size: 10vw;
+
+/*<<<<<< Display section >>>>>>>*/
+#display {
+    margin: 2vh 0;
+    height: 20vh;
+    background-color: #a9a9a9;
 }
-#show{
-    display: block;
-    color: white;
-    position: absolute;
-    bottom:1vh;
-    font-size: 7vw;
+#code, #show{
+    font-size: 20px;
 }
-.container{
-    height: 100vh;
-}
-.col-12{
-    padding-top: 5vh;
-    height: 40vh;
-}
-.col-3{
+
+/*<<<<<<<<<<<< Buttons >>>>>>>>>>>>*/
+.col-3, .col-6{
+    margin-top: 2vh;
     height: 10vh;
     display: flex;
     justify-content: center;
     align-items: center;
     color:aliceblue;
-    background-color:darkgrey;
-    border-radius: 50%;
-}
-.col-6{
-    height: 10vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color:aliceblue;
-    background-color: darkgrey;
-    border-radius: 50%;
+    background-color:#161515;
+    border-radius: 100%;
 }
 .opr{
     background-color: darkorange;
 }
 
 @media screen and (min-width: 450px){
-    html{
-        background-color: aliceblue;
-    }
     body{
         max-width: 449px;
         margin: 0px auto !important;
     }
-    #code{
-        font-size: 40px;
-    }
-    #show{
-        font-size: 50px;
+    #code, #show{
+        font-size: 25px;
     }
     .container{
         height: 100vh;
     }
 }
 @media screen and (min-width: 2000px){
-    html{
-        background-color: aliceblue;
-    }
     body{
         max-width: 650px;
         margin: 0px auto !important;
     }
-    #code{
-        font-size: 60px;
-    }
-    #show{
-        font-size: 65px;
+    #code, #show{
+        font-size: 35px;
     }
     .container{
         height: 100vh;
+    }
+}
+@media screen and (min-height: 1100px){
+    #code{
+        font-size: 1rem;
+    }
+    #show{
+        font-size: 1.5rem;
     }
 }
