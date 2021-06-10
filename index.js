@@ -1,464 +1,217 @@
 /*
-Contents
-1. Variable Declaration
-2. Event Listeners for inputs
-    2.1 for keyboard inputs
-    2.2 for click inputs
-    2.3 clear command
-3. Functions
-4. Evaluation
-    4.1 via click events
-    4.2 via keyboard inputs
-*/
+value: temporarily stores the inputted value before a mathematical operator is activated.
+operator: this indicates the type of mathemtical operator that is active. */
+var value = "", operator = "";
 
-//////////////////////////////
-//  1. Variable declaration
-    var a, b;
-    var value="";
-    var evaluatedValue;
-    var operator="";
-    var displayMsg;
-//////////////////////////////
+/*
+evaluatedValue: The final evaluated value is stored here.
+displayMsg: This is displays a message when the assignment operator is clicked twice after evaluation is complete. */
+var evaluatedValue, displayMsg;
 
-//////////////////////////////
-//  2. Event listeners for inputs...
+//<<<<<<<<<<<<<<<<<<< EVENT LISTENERS FOR KEYBOARD & SCREEN TOUCH INPUTS >>>>>>>>>>>>>>>>>>>>>
+var arrayKey = ["0", "9", "8", "7", "6", "5", "4", "3", "2", "1"];
 
-    //  2.1 ...for keyboard inputs
-            document.addEventListener('keydown', function(e){
-                if (e.key==1){
-                    value+= "1";
-                }
-                if (e.key=="2"){
-                    value= value + "2";
-                }
-                if (e.key=="3"){
-                    value= value + "3";
-                }
-                if (e.key=="4"){
-                    value= value + "4";
-                }
-                if (e.key=="5"){
-                    value= value + "5";
-                }
-                if (e.key=="6"){
-                    value= value + "6";
-                }
-                if (e.key=="7"){
-                    value= value + "7";
-                }
-                if (e.key=="8"){
-                    value= value + "8";
-                }
-                if (e.key=="9"){
-                    value= value + "9";
-                }
-                if (e.key=="0"){
-                    value= value + "0";
-                }
-                if (e.key=="."){
-                    if (value.includes(".")) { //if "." is already typed, error message is thrown
-                        alert("Invalid entry");
-                    }
-                    else{
-                        value= value + ".";
-                    }
-                }
-                $(".opr").css("background-color","darkorange"); //jQuery: changes the operators color back to default when an input is made
-                return display();
-            })
+var keyboardInput = (() => {
+    document.addEventListener('keydown', function(e){
+        let keyPressed = e.key;
+        if (arrayKey.includes(keyPressed)) {
+            value += e.key;
+        }
+        if (e.key=="."){
+            //if "." is already typed, error message is thrown
+            (value.includes(".")) ? alert("Invalid entry"): value = value + ".";
+        }
+        //jQuery: changes the operators color back to default when an input is made
+        $(".opr").css("background-color","darkorange");
+        return display();
+    })
+}); keyboardInput();
     
-    //  2.2 ...for click inputs
-            $(".numb").click( //jQuery
-                function(){
-                    if (this.id=="1"){
-                        value= value + "1";
-                    }
-                    if (this.id=="2"){
-                        value= value + "2";
-                    }
-                    if (this.id=="3"){
-                        value= value + "3";
-                    }
-                    if (this.id=="4"){
-                        value= value + "4";
-                    }
-                    if (this.id=="5"){
-                        value= value + "5";
-                    }
-                    if (this.id=="6"){
-                        value= value + "6";
-                    }
-                    if (this.id=="7"){
-                        value= value + "7";
-                    }
-                    if (this.id=="8"){
-                        value= value + "8";
-                    }
-                    if (this.id=="9"){
-                        value= value + "9";
-                    }
-                    if (this.id=="0"){
-                        value= value + "0";
-                    }
-                    if (this.id=="."){
-                        if (value.includes(".")) {
-                            alert("Invalid entry");
-                        }
-                        else{
-                            value= value + ".";
-                        }
-                    }
-                    $(".opr").css("background-color","darkorange");
-                    return display();
-                }
-            )
-    //2.3 clear command
-            $("#clear").click( function(){
-                a= undefined;
-                b= undefined;
-                value="";
-                evaluatedValue= undefined;
-                operator="";
-                displayMsg= undefined;
-                document.getElementById("code").innerHTML="";
-                document.getElementById("show").innerHTML= "";
-                $("#plus, #minus, #multiply, #modulo, #equa").
-                css("background-color","darkorange");
-            })
-
-//////////////////////////////
-
-//////////////////////////////
-//  3. Functions
-    function modulo(){
-        a=evaluatedValue;
-        value="";
-    }
-    function moduloB() { 
-        //activates background color of operator as active
-        $("#modulo").css("background-color","darkgrey"); //jQuery: ...background color change indictes it is active
-        //deactivates background-color as active
-        $("#plus, #minus, #multiply, #equa, #divide"). 
-        css("background-color","darkorange"); //jQuery: ...other operator buttons retore to default
-        //then...
-        if (operator==""){ // ... when clicking for the first time
-            a= Number(value); // var a, collects the strings contained in "value" container and converts it to number
-            value=""; // value becomes empty
-            evaluatedValue= a/100; 
-            operator="modulo"; // modulo operator becomes active
-        }else if (operator=="minus"){ //.. if minus operator is active
-            minus();
-            operator="modulo";
-        }else if (operator=="multiply"){
-            multiply();
-            operator= "modulo";
-        }else if (operator=="divide"){
-            divide();
-            operator="modulo";
-        }else if (operator=="plus"){
-        plus();
-        operator="modulo";
-        }else if (operator=="equa"){
-            a= evaluatedValue;
-            value="";
-            evaluatedValue= a/100;
-            operator= "modulo";
+var screenTouchInput = (() => {
+    $(".numb").click( function () {
+        let numId = this.id;
+        if (arrayKey.includes(numId)) {
+            value += numId;
         }
-    }
-    function equalTo(){
-        $("#equa").css("background-color","darkgrey");
-        $("#plus, #minus, #multiply, #modulo, #divide").
-        css("background-color","darkorange");
+        if (this.id=="."){
+            (value.includes(".")) ? alert("Invalid entry"): value = value + ".";
+        }
+        $(".opr").css("background-color","darkorange");
+        return display();
+    })
+}); screenTouchInput();
 
-        if(operator==""){
-            evaluatedValue= Number(value);
-        }else if (operator=="minus"){
-            minus();
-            operator="equa";
-        }else if (operator=="multiply"){
+var clearScreen = (() => {
+    //restores to default
+    $("#clear").click( function() {
+        reset();
+        $("#plus, #minus, #multiply, #modulo, #equa").css("background-color","darkorange");
+    })
+}); clearScreen();
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< OPERATOR LOGIC >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+function modulo() {
+    evaluatedValue = evaluatedValue/100;
+    value="";
+}
+
+function plus(x) {
+    let a = evaluatedValue;
+    let b = Number(value);
+    evaluatedValue = a+b;
+    value = "";
+}
+
+function minus() {
+    let a = evaluatedValue;
+    let b = Number(value);
+    value = "";
+    evaluatedValue = a-b;
+    return evaluatedValue;
+}
+
+function multiply() {
+    a = evaluatedValue;
+    b = Number(value);
+    value = "";
+    evaluatedValue = a*b;
+    return evaluatedValue; 
+}
+
+function divide() {
+    a = evaluatedValue;
+    b = Number(value);
+    value = "";
+    evaluatedValue = a/b;
+    return evaluatedValue;
+}
+
+function minplus() {
+    if(evaluatedValue){
+        evaluatedValue = 0 - evaluatedValue;
+    }else{
+        evaluatedValue = 0 - Number(value)
+    }
+}
+
+function equalTo(){
+    $("#equa").css("background-color","red");
+    $("#plus, #minus, #multiply, #modulo, #divide").css("background-color","darkorange");
+    if (operator == "") {
+        evaluatedValue = Number(value);
+    }else if (operator == "minus") {
+        minus();
+    }else if (operator == "multiply") {
         multiply();
-        operator= "equa";
-        }else if (operator=="divide"){
-            divide();
-            operator="equa";
-        }else if (operator=="plus"){
-            plus();
-            operator="equa";
-        }else if (operator=="modulo"){
-            modulo();
-            operator="equa";
-        }else if (evaluatedValue== displayMsg && operator=="equa"){ 
-            alert(evaluatedValue);
-            /* when assignment/equalTo operator has already be clicked and the user clicks it again, 
-            this code block prevents the "your answer is ..." message from rendering in the DOM twice
-            rather a popup occurs.*/
-        }else{
-            displayMsg=document.getElementById("show").innerHTML= `your anwser is ${evaluatedValue}.`;
-            evaluatedValue=displayMsg;
-            //for a display message
-        }
+    }else if (operator == "divide") {
+        divide();
+    }else if (operator == "plus") {
+        plus();
+    }else if (operator == "modulo") {
+        modulo();
+    /* if assignment operator has been clicked more than twice, 
+    this code block prevents the "your answer is ..." message from rendering in the DOM twice rather a popup re-occurs. */
+    }else if (evaluatedValue == displayMsg && operator == "equa"){ 
+        alert(evaluatedValue);
+    //for a display message; the "=" operator is clicked twice.
+    }else {
+        displayMsg = document.getElementById("show").innerHTML = `Anwser = ${evaluatedValue}.`;
+        evaluatedValue = displayMsg;
     }
-    function equalToB(){ //sets to all variable to default when any arithmetic operator is clicked after the equal sign has been clicked twice
-        displayMsg= undefined;
-        evaluatedValue= undefined;
-        value="";
-        operator="";
-        document.getElementById("show").innerHTML="";
-        document.getElementById("code").innerHTML="";
+    operator="equa";
+}
+
+function reset() {
+    displayMsg= undefined;
+    evaluatedValue= undefined;
+    value="";
+    operator="";
+    document.getElementById("show").innerHTML="";
+    document.getElementById("code").innerHTML="";
+}
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< OTHERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// display(): displays the inputted value as soon as it is keyed in.
+function display(){
+    let code = document.getElementById("code");
+    code.textContent = value;
+}
+
+// evaluate(): evaluates for all other arithmetic operators aside "=" and "-/+".
+function evaluate(operatorId) {
+    //if the user previously used the "=" more than thrice and then clicks any other operator, reset() function is run.
+    if (displayMsg && operator == "equa"){
+        reset();
     }
-    function display(){
-        let tag=document.getElementById("code");
-        let display= tag.textContent= value;
-        console.log(display);
-        // the input temporarily stored in the value variable is sent to DOM for display
+    $(".opr").css("background-color", "darkorange");
+    $(`#${operatorId}`).css("background-color", "red");
+    if (operator == "" && operatorId == "modulo") {
+        evaluatedValue = Number(value)/100;
+        value ="";
+    }else if (operator == "modulo") {
+        modulo();
+    }else if (operator == "") {
+        evaluatedValue = Number(value);
+        value = "";
     }
-    function plus (){
-        b=Number(value);
-        a=evaluatedValue;
-        evaluatedValue= a+b;
-        value="";
-        return evaluatedValue;          
-    }
-    function plusB(){
-        if (displayMsg && operator=="equa"){
-            equalToB();
-        }
-        $("#plus").css("background-color","darkgrey");
-        $("#equa, #minus, #multiply, #modulo, #divide").
-        css("background-color","darkorange");
-        if(operator==""){
-            a=Number(value);
-            b=0;
-            value="";
-            evaluatedValue= a+b;
-            operator="plus";
-        }else if (operator=="minus"){
-            minus();
-            operator="plus";
-        }else if (operator=="multiply"){
-            multiply();
-            operator= "plus";
-        }else if (operator=="divide"){
-            divide();
-            operator="plus";
-        }else if (operator=="modulo"){
-            modulo();
-            operator="plus";
-        } else if (operator=="equa"){
-            a= evaluatedValue;
-            b=0;
-            value="";
-            evaluatedValue= a+b;
-            operator= "plus";
+    else if (operator == "minus") {
+        minus();
+    }else if (operator=="plus"){
+        plus(x);
+    }else if (operator == "multiply") {
+        multiply();
+    }else if (operator == "divide") {
+        divide();
+    }else if (operator == "equa") {
+        if ( operatorId == "modulo" ) {
+            let valueCollector = evaluatedValue;
+            value = "";
+            evaluatedValue = valueCollector/100;
         }else {
-            plus();
-            operator="plus"; 
-        }
+            let a = evaluatedValue;
+            value = "";
+            evaluatedValue = a;
+        }          
     }
-    function minus (){
-        b= Number(value);
-        a= evaluatedValue;
-        value="";
-        evaluatedValue= a-b;
-        return evaluatedValue; 
-    }
-    function minusB(){
-        if (displayMsg && operator=="equa"){
-            equalToB();
-        }
-        $("#minus").css("background-color","darkgrey");
-        $("#plus, #equa, #multiply, #modulo, #divide").
-        css("background-color","darkorange");
-        if (operator==""){
-            a= Number(value);
-            b=0;
-            value="";
-            evaluatedValue= a-b;
-            operator="minus";
-        }else if (operator=="plus"){
-            plus();
-            operator="minus";
-        }else if (operator=="multiply"){
-            multiply();
-            operator= "minus";
-        }else if (operator=="divide"){
-            divide();
-            operator="minus";
-        }else if (operator=="modulo"){
-            modulo();
-            operator="minus";
-        }else if (operator=="equa"){
-            a= evaluatedValue;
-            b=0;
-            value="";
-            evaluatedValue= a-b;
-            operator= "minus";
-        } else{
-            minus();
-            operator="minus";
-        }       
-    }
-    function multiply (){
-        b= Number(value);
-        a=evaluatedValue;
-        value="";
-        evaluatedValue= a*b;
-        return evaluatedValue; 
-    }
-    function multiplyB(){
-        if (displayMsg && operator=="equa"){
-            equalToB();
-        }
-        $("#multiply").css("background-color","darkgrey");
-        $("#plus, #minus, #equa, #modulo, #divide").
-        css("background-color","darkorange");
-        if (operator==""){
-            a= Number(value);
-            b=1;
-            value="";
-            evaluatedValue= a*b;
-            operator="multiply";
-        }else if (operator=="plus"){
-            plus();
-            operator="multiply";
-        }else if (operator=="minus"){
-            minus();
-            operator="multiply";
-        }else if (operator=="divide"){
-            divide();
-            operator="multiply";
-        }else if (operator=="modulo"){
-            modulo();
-            operator="multiply";
-        }else if (operator=="equa"){
-            a= evaluatedValue;
-            b=1;
-            value="";
-            evaluatedValue= a*b;
-            operator= "multiply";
-        }else{
-            multiply();
-            operator= "multiply";
-        }
-    }
-    function divide (){
-        b= Number(value);
-        a=evaluatedValue;
-        value="";
-        evaluatedValue=a/b;
-        return evaluatedValue;
-    }
-    function divideB(){
-        if (displayMsg && operator=="equa"){
-            equalToB();
-        }
-        $("#divide").css("background-color","darkgrey");
-        $("#plus, #minus, #multiply, #modulo, #equa").
-        css("background-color","darkorange");
-        if (operator==""){
-            a= Number(value);
-            b=1;
-            value="";
-            evaluatedValue=a/b;
-            operator= "divide";
-        }else if (operator=="plus"){
-            plus();
-            operator="divide";
-        }else if (operator=="minus"){
-            minus();
-            operator="divide";
-        }else if (operator=="multiply"){
-            multiply();
-            operator= "divide";
-        }else if (operator=="equa"){
-            a= evaluatedValue;
-            b=1;
-            value="";
-            evaluatedValue= a/b;
-            operator= "divide";
-        }else if (operator=="modulo"){
-            modulo();
-            operator="divide";
+    operator = operatorId;
+}
+
+//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< EVENT LISTENERS THAT RUNS EVALUATING LOGIC >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+var evaluatingListenerTouch = (() => {
+    $(".opr").click(function(){ 
+        if (this.id == "equa"){
+            equalTo();
+        }else if (this.id == "minplus"){
+            minplus();
         }else {
-            divide();
-            operator="divide";
+            let a = this.id;
+            evaluate(a);
         }
-    }
-////////////////////////////////
+        document.getElementById("show").innerHTML= evaluatedValue; 
+    })
+}); evaluatingListenerTouch();
 
-////////////////////////////////
-//  4. Evaluation
-
-    //  4.1 via clicks
-        $(".opr").click(function(){ //jQuery
-
-            // if "%" is clicked...
-            if (this.id=="modulo"){ 
-                moduloB();
+var evaluatingListenerKey = (() => {
+    document.addEventListener('keydown', function(e){
+        if (e.key == "=" || e.key == "Enter"){
+            equalTo();
+            document.getElementById("show").innerHTML= evaluatedValue;
+        } else if (e.key == "%" || e.key == "+" || e.key == "-" || e.key == "*" || e.key == "/") {
+            let a;
+            if (e.key == "%") {
+                a = "modulo";
+            }else if (e.key == "+") {
+                a = "plus";
+            }else if (e.key == "-") {
+                a = "minus";
+            }else if (e.key == "*") {
+                a = "multiply";
+            }else if (e.key == "/") {
+                a = "divide";
             }
-
-            //if "=" is clicked...
-            if (this.id=="equa"){
-                equalTo();
-            }
-
-            //if "+" is clicked...
-            if (this.id=="plus"){
-                plusB();
-            }
-
-            //if "-" is clicked...
-            if (this.id=="minus"){
-                minusB();
-            }
-
-            //if "*" is clicked...
-            if (this.id=="multiply"){
-                multiplyB();
-            }
-            
-            //if "/" is clicked...
-            if (this.id=="divide"){
-                divideB();
-            }
-
-            //if "-/+" is clicked...
-            if (this.id=="minplus"){
-                if(evaluatedValue){
-                    evaluatedValue=0-evaluatedValue;
-                }else{
-                    evaluatedValue= 0 - Number(value)
-                }
-            }
-            document.getElementById("show").innerHTML= evaluatedValue; 
-            return console.log(evaluatedValue);
-        })
-
-        //  4.2 via keyboard inputs
-        document.addEventListener('keydown', function(e){
-            if (e.key=="%"){
-                moduloB();
-                return document.getElementById("show").innerHTML= evaluatedValue;
-            }
-
-            if (e.key=="=" || e.key=="Enter"){
-                equalTo();
-                return document.getElementById("show").innerHTML= evaluatedValue;
-            }
-            if (e.key=="+"){
-                plusB;
-                return document.getElementById("show").innerHTML= evaluatedValue;
-            }
-            if (e.key=="-"){
-                minusB();
-                return document.getElementById("show").innerHTML= evaluatedValue;
-            }
-            if (e.key=="*"){
-                multiplyB();
-                return document.getElementById("show").innerHTML= evaluatedValue;
-            }
-            if (e.key=="/"){
-                divideB();
-                return document.getElementById("show").innerHTML= evaluatedValue;
-            }
-        })
+            evaluate(a);    
+            document.getElementById("show").innerHTML= evaluatedValue;       
+        }        
+    })
+}); evaluatingListenerKey();
