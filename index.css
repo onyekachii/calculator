@@ -1,17 +1,18 @@
+/*<<<<<< Bootstrap was also used to style the page, checkback to the index file before making changes >>>>>> */
 html{
     background-color: teal;
     background-image: url(./circuit-board.svg);
 }
 body{
+    height: 100vh;
     background-color:seagreen!important;
     background-image: url(./circuit-board.svg);
 }
 
 /*<<<<<< Display section >>>>>>>*/
 #display {
-    margin: 2vh 0;
+    margin: 0 0 2vh ;
     height: 20vh;
-    background-color: #a9a9a9;
 }
 #code, #show{
     font-size: 20px;
