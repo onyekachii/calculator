@@ -13,6 +13,7 @@ var arrayKey = ["0", "9", "8", "7", "6", "5", "4", "3", "2", "1"];
 
 var keyboardInput = (() => {
     document.addEventListener('keydown', function(e){
+        document.getElementById('clear').innerText = "C";
         let keyPressed = e.key;
         if (arrayKey.includes(keyPressed)) {
             value += e.key;
@@ -29,6 +30,7 @@ var keyboardInput = (() => {
     
 var screenTouchInput = (() => {
     $(".numb").click( function () {
+        document.getElementById('clear').innerText = "C"
         let numId = this.id;
         if (arrayKey.includes(numId)) {
             value += numId;
@@ -44,6 +46,8 @@ var screenTouchInput = (() => {
 var clearScreen = (() => {
     //restores to default
     $("#clear").click( function() {
+        document.getElementById('clear').innerText = "AC";
+        document.getElementById('sign').innerHTML = "GitHub: @onyekachii";
         reset();
         $("#plus, #minus, #multiply, #modulo, #equa").css("background-color","darkorange");
     })
@@ -55,7 +59,7 @@ function modulo() {
     value="";
 }
 
-function plus(x) {
+function plus() {
     let a = evaluatedValue;
     let b = Number(value);
     evaluatedValue = a+b;
@@ -90,11 +94,14 @@ function minplus() {
     if(evaluatedValue){
         evaluatedValue = 0 - evaluatedValue;
     }else{
-        evaluatedValue = 0 - Number(value)
+        evaluatedValue = 0 - Number(value);
     }
+    value = "";
 }
 
 function equalTo(){
+    document.getElementById('sign').innerHTML = "=";
+    document.getElementById('code').innerHTML = "";
     $("#equa").css("background-color","red");
     $("#plus, #minus, #multiply, #modulo, #divide").css("background-color","darkorange");
     if (operator == "") {
@@ -140,6 +147,25 @@ function display(){
 
 // evaluate(): evaluates for all other arithmetic operators aside "=" and "-/+".
 function evaluate(operatorId) {
+    console.log(evaluatedValue, operator, value)
+    switch (operatorId) {
+        case "modulo":
+            document.getElementById('sign').innerHTML = "%";
+            break;
+        case "minus" :
+            document.getElementById('sign').innerHTML = "-";
+            break;
+        case "plus": 
+            document.getElementById('sign').innerHTML = "+";
+            break;
+        case "multiply" :
+            document.getElementById('sign').innerHTML = "x";
+            break;
+        case "divide" :
+            document.getElementById('sign').innerHTML = "/";
+            break;
+    }
+    document.getElementById('code').innerHTML = "";
     //if the user previously used the "=" more than thrice and then clicks any other operator, reset() function is run.
     if (displayMsg && operator == "equa"){
         reset();
@@ -147,18 +173,22 @@ function evaluate(operatorId) {
     $(".opr").css("background-color", "darkorange");
     $(`#${operatorId}`).css("background-color", "red");
     if (operator == "" && operatorId == "modulo") {
+        $("#modulo").css("background-color", "darkorange");
+        document.getElementById('sign').innerHTML = "GitHub: @onyekachii";
         evaluatedValue = Number(value)/100;
         value ="";
-    }else if (operator == "modulo") {
-        modulo();
     }else if (operator == "") {
         evaluatedValue = Number(value);
         value = "";
+    }else if (operator == "-/+") {
+        
     }
-    else if (operator == "minus") {
+    else if (operator == "modulo") {
+        modulo();
+    }else if (operator == "minus") {
         minus();
     }else if (operator=="plus"){
-        plus(x);
+        plus();
     }else if (operator == "multiply") {
         multiply();
     }else if (operator == "divide") {
@@ -174,7 +204,7 @@ function evaluate(operatorId) {
             evaluatedValue = a;
         }          
     }
-    operator = operatorId;
+    operator = operatorId;  console.log(evaluatedValue, operator)
 }
 
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< EVENT LISTENERS THAT RUNS EVALUATING LOGIC >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -183,6 +213,9 @@ var evaluatingListenerTouch = (() => {
         if (this.id == "equa"){
             equalTo();
         }else if (this.id == "minplus"){
+            operator = "-/+";
+            $(".opr").css("background-color", "darkorange");
+            document.getElementById('code').innerHTML = "";
             minplus();
         }else {
             let a = this.id;
@@ -196,7 +229,7 @@ var evaluatingListenerKey = (() => {
     document.addEventListener('keydown', function(e){
         if (e.key == "=" || e.key == "Enter"){
             equalTo();
-            document.getElementById("show").innerHTML= evaluatedValue;
+            document.getElementById("show").innerHTML= evaluatedValue;       
         } else if (e.key == "%" || e.key == "+" || e.key == "-" || e.key == "*" || e.key == "/") {
             let a;
             if (e.key == "%") {
@@ -210,8 +243,8 @@ var evaluatingListenerKey = (() => {
             }else if (e.key == "/") {
                 a = "divide";
             }
-            evaluate(a);    
-            document.getElementById("show").innerHTML= evaluatedValue;       
+            evaluate(a);  
+            document.getElementById("show").innerHTML= evaluatedValue;  
         }        
     })
 }); evaluatingListenerKey();
